@@ -2,6 +2,8 @@ package com.educandoweb.course.entities;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,20 +11,17 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.educandoweb.course.entities.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = "tb_order")
-@Getter
-@Setter
 @NoArgsConstructor
 public class Order implements Serializable {
 
@@ -41,6 +40,9 @@ public class Order implements Serializable {
 	@JoinColumn(name = "client_id")
 	private User client;
 
+	@OneToMany(mappedBy = "id.order")
+	private Set<OrderItem> items = new HashSet<>();
+
 	public Order(Long id, Instant moment, OrderStatus orderStatus, User client) {
 		super();
 		this.id = id;
@@ -49,14 +51,42 @@ public class Order implements Serializable {
 		this.client = client;
 	}
 	
+	public Long getId() {
+		return id;
+	}
+
+	public Instant getMoment() {
+		return moment;
+	}
+
+	public User getClient() {
+		return client;
+	}
+
+	public Set<OrderItem> getItems() {
+		return items;
+	}
+
 	public OrderStatus getOrderStatus() {
 		return OrderStatus.valueOf(orderStatus);
 	}
-	
+
 	public void setOrderStatus(OrderStatus orderStatus) {
-		if(orderStatus != null) {
-		this.orderStatus = orderStatus.getCode();
+		if (orderStatus != null) {
+			this.orderStatus = orderStatus.getCode();
 		}
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setMoment(Instant moment) {
+		this.moment = moment;
+	}
+
+	public void setClient(User client) {
+		this.client = client;
 	}
 
 	@Override
@@ -83,5 +113,7 @@ public class Order implements Serializable {
 			return false;
 		return true;
 	}
+
 	
+
 }
