@@ -1,24 +1,24 @@
 package com.educandoweb.course.entities;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "tb_user")
+@Table(name = "tb_product")
 @NoArgsConstructor
-public class User implements Serializable{
+@Getter
+public class Product implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -28,67 +28,42 @@ public class User implements Serializable{
 	
 	private String name;
 	
-	private String email;
+	private String description;
 	
-	private String phone;
+	private Double price;
 	
-	private String password;
+	private String imgUrl;
 	
-	@JsonIgnore
-	@OneToMany(mappedBy = "client")
-	private List<Order> orders = new ArrayList<>();
+	@Transient
+	private Set<Category> categories = new HashSet<>();
 
-	public User(Long id, String name, String email, String phone, String password) {
+	public Product(Long id, String name, String description, Double price, String imgUrl) {
 		super();
 		this.id = id;
 		this.name = name;
-		this.email = email;
-		this.phone = phone;
-		this.password = password;
-	}
-
-	public Long getId() {
-		return id;
+		this.description = description;
+		this.price = price;
+		this.imgUrl = imgUrl;
 	}
 
 	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
-	}
-
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	public String getEmail() {
-		return email;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setPrice(Double price) {
+		this.price = price;
 	}
 
-	public String getPhone() {
-		return phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public List<Order> getOrders() {
-		return orders;
+	public void setImgUrl(String imgUrl) {
+		this.imgUrl = imgUrl;
 	}
 
 	@Override
@@ -107,7 +82,7 @@ public class User implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		User other = (User) obj;
+		Product other = (Product) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -115,5 +90,5 @@ public class User implements Serializable{
 			return false;
 		return true;
 	}
-
+	
 }
